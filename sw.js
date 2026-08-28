@@ -1,8 +1,11 @@
-const CACHE = 'datahub-v2-0-1';
+const CACHE = 'datahub-v2-1';
 const ASSETS = [
-  './Chrissie.html',
+  './',
+  './index.html',
   './manifest.webmanifest',
-  './icon.svg'
+  './icon.svg',
+  './icon-192.png',
+  './icon-512.png'
 ];
 
 self.addEventListener('install', (event) => {
