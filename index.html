@@ -514,7 +514,7 @@
                 <p id="form-subtitle"></p>
             </header>
 
-            <form id="record-form" onsubmit="handleFormSubmit(event)">
+            <form id="record-form" novalidate onsubmit="handleFormSubmit(event)">
                 <div class="card">
                     <div class="standard-fields">
                         <div id="session-context" class="session-context" hidden></div>
@@ -1210,6 +1210,22 @@
             document.querySelectorAll('.form-fields').forEach((el) => {
                 el.hidden = el.id !== 'fields-' + typeId;
             });
+            syncActiveFormFields(typeId);
+        }
+
+        /** Hidden sections stay in the DOM; disable their inputs so HTML5 validation and FormData ignore them. */
+        function syncActiveFormFields(typeId) {
+            document.querySelectorAll('.form-fields').forEach((section) => {
+                const active = section.id === 'fields-' + typeId;
+                section.querySelectorAll('input, select, textarea').forEach((el) => {
+                    el.disabled = !active;
+                });
+            });
+            const systemBlock = document.getElementById('system-block');
+            systemBlock.querySelectorAll('input').forEach((el) => {
+                el.disabled = typeId === 'quick-note';
+            });
+            if (typeId === 'failures') handleLogTypeChange();
         }
 
         function stampNow(id) {
@@ -1272,6 +1288,7 @@
             clearLocation();
             if (typeId === 'failures') setChipValues(form, 'logType', 'failure');
             resetCharCounters(form);
+            syncActiveFormFields(typeId);
         }
 
         function updateLocUI() {
@@ -1345,6 +1362,49 @@
             return record;
         }
 
+        function validateActiveForm(form) {
+            const time = document.getElementById('metaTime').value;
+            if (!time) {
+                showNotification('Set a collection time.', true);
+                return false;
+            }
+            if (currentTypeId === 'quick-note') {
+                if (!document.getElementById('notes').value.trim()) {
+                    showNotification('Enter a note.', true);
+                    return false;
+                }
+                return true;
+            }
+            const sys = selectedChipValue(form, 'system');
+            if (!sys) {
+                showNotification('Select a system.', true);
+                return false;
+            }
+            if (sys === 'other' && !document.getElementById('systemOther').value.trim()) {
+                showNotification('Specify the system name.', true);
+                return false;
+            }
+            const active = document.getElementById('fields-' + currentTypeId);
+            if (!active) return true;
+            const seen = new Set();
+            for (const el of active.querySelectorAll('[required]')) {
+                if (el.disabled) continue;
+                if (el.type === 'radio' || el.type === 'checkbox') {
+                    if (seen.has(el.name)) continue;
+                    seen.add(el.name);
+                    const group = active.querySelectorAll(`[name="${el.name}"]`);
+                    if (![...group].some((i) => i.checked && !i.disabled)) {
+                        showNotification('Complete all required fields.', true);
+                        return false;
+                    }
+                } else if (!String(el.value || '').trim()) {
+                    showNotification('Complete all required fields.', true);
+                    return false;
+                }
+            }
+            return true;
+        }
+
         function handleFormSubmit(event) {
             event.preventDefault();
             const form = event.target;
@@ -1353,17 +1413,7 @@
                 showView('session');
                 return;
             }
-            if (currentTypeId !== 'quick-note') {
-                const sys = selectedChipValue(form, 'system');
-                if (!sys) {
-                    showNotification('Select a system.', true);
-                    return;
-                }
-                if (sys === 'other' && !document.getElementById('systemOther').value.trim()) {
-                    showNotification('Specify the system name.', true);
-                    return;
-                }
-            }
+            if (!validateActiveForm(form)) return;
             const record = readFormRecord();
             const nowIso = new Date().toISOString();
             if (editId) {
@@ -1461,6 +1511,7 @@
             }
             updateLocUI();
             form.querySelectorAll('textarea[maxlength]').forEach(updateCharCounter);
+            syncActiveFormFields(typeId);
             if (typeId === 'failures') handleLogTypeChange();
         }
 
