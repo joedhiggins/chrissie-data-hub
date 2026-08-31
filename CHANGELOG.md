@@ -1,3 +1,23 @@
+# Data Hub v2.1
+
+## Added
+
+- **Mission** record type — name, type, objective, start/end time, battery at start and end (0–100% in 20% steps), visibility and audibility to adversary, and result. Uses the same session metadata (collector, date, time, event, system, location) as other records.
+- **NET/NEF Feedback** record type — configuration (Fixed Site / Mobile / Dismounted/handheld), setup rating (1–5 with labeled scale), plus instruction/documentation ratings, readiness, and comments.
+- Operator Feedback **Conditions** free-text fields that appear when **Conditional** is selected on “carry this system on an actual mission?” and “use without vendor support?”
+
+## Changed
+
+- System Properties **Network connectivity** options are now TAK, SCCA, TAK and SCCA, and No connectivity (was Wired Only / Wireless Only / Both / None).
+- System Properties **Battery chemistry** list shortened from 8 options to 5:
+  - Before: Lithium-Ion (Li-Ion); Lithium Polymer (Li-Po); Lithium Iron Phosphate (LiFePO4); Nickel-Metal Hydride (NiMH); Nickel-Cadmium (NiCd); Alkaline; Lead-Acid; Other / Custom
+  - After: Lithium-Ion (Li-Ion / Li-Po); Lithium Iron Phosphate (LiFePO4); Nickel-Metal Hydride (NiMH); Alkaline; Other
+  - Li-Po is folded into Lithium-Ion. NiCd and Lead-Acid (uncommon on current cUAS kits) map to Other when old records are opened.
+- Engagement **Attack geometry** adds Treetop-level and High-altitude.
+- Engagement **DDIL environment** is renamed **DDIL effects on cUAS system**, with No effects, Intermittent connection, Lost connection, and Spoofed. Prior “No (optimal)” values migrate to No effects.
+- Engagement **Track continuity** adds False positive.
+- Engagement **Observed effect** adds No effects.
+
 # Data Hub v2.0
 
 ## Added

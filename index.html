@@ -359,10 +359,12 @@
             letter-spacing: 0.03em;
         }
         .badge-sys { background: #dbeafe; color: #1e40af; }
+        .badge-mis { background: #e0e7ff; color: #3730a3; }
         .badge-eng { background: #fef3c7; color: #92400e; }
         .badge-gcs { background: #e0f2fe; color: #0369a1; }
         .badge-fail { background: #fee2e2; color: #991b1b; }
         .badge-op { background: #d1fae5; color: #065f46; }
+        .badge-net { background: #ccfbf1; color: #115e59; }
         .badge-note { background: #ede9fe; color: #5b21b6; }
 
         .filter-row { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-bottom: 1rem; }
@@ -450,7 +452,7 @@
 </head>
 <body>
     <aside>
-        <div class="brand"><span>📋</span> Data Hub v2.0</div>
+            <div class="brand"><span>📋</span> Data Hub v2.1</div>
         <nav>
             <button type="button" class="nav-btn" data-nav="session" onclick="showView('session')">⚙️<span>Session</span></button>
             <button type="button" class="nav-btn nav-btn-new" onclick="openRecordPicker()">＋<span>New</span></button>
@@ -561,7 +563,7 @@
                             <div class="form-group"><label for="exportMedia">Export media / interfaces</label><input type="text" id="exportMedia" name="exportMedia" placeholder="e.g. USB-C, SD Card, WiFi"></div>
                             <div class="form-group">
                                 <span class="field-label">Network connectivity</span>
-                                <div class="chip-group" data-chips="exclusive" data-name="connectivity" data-options="Wired Only|Wireless Only|Both Wired &amp; Wireless|None"></div>
+                                <div class="chip-group" data-chips="exclusive" data-name="connectivity" data-options="TAK|SCCA|TAK and SCCA|No connectivity"></div>
                             </div>
                         </div>
                         <div class="form-subsection-title">Battery &amp; power</div>
@@ -574,14 +576,11 @@
                                 <label for="batteryChemistry">Battery chemistry</label>
                                 <select id="batteryChemistry" name="batteryChemistry">
                                     <option value="">-- Select --</option>
-                                    <option>Lithium-Ion (Li-Ion)</option>
-                                    <option>Lithium Polymer (Li-Po)</option>
+                                    <option>Lithium-Ion (Li-Ion / Li-Po)</option>
                                     <option>Lithium Iron Phosphate (LiFePO4)</option>
                                     <option>Nickel-Metal Hydride (NiMH)</option>
-                                    <option>Nickel-Cadmium (NiCd)</option>
                                     <option>Alkaline</option>
-                                    <option>Lead-Acid</option>
-                                    <option>Other / Custom</option>
+                                    <option>Other</option>
                                 </select>
                             </div>
                             <div class="form-group">
@@ -620,21 +619,19 @@
                             <div class="form-group"><label for="humidity">RH (%)</label><input type="number" id="humidity" name="humidity" min="0" max="100" step="1" inputmode="numeric"></div>
                         </div>
                         <div class="form-subsection-title">Tactical &amp; threat profile</div>
-                        <div class="grid-2 pair-sm" style="margin-bottom: 1rem;">
-                            <div class="form-group">
-                                <span class="field-label">Tactical posture</span>
-                                <div class="chip-group" data-chips="exclusive" data-name="tacticalPosture" data-options="Mobile|Static"></div>
-                            </div>
-                            <div class="form-group">
-                                <span class="field-label">DDIL environment</span>
-                                <div class="chip-group" data-chips="exclusive" data-name="ddilEnv" data-options="Yes=Yes (DDIL)|No=No (optimal)"></div>
-                            </div>
+                        <div class="form-group" style="margin-bottom: 1rem;">
+                            <span class="field-label">Tactical posture</span>
+                            <div class="chip-group" data-chips="exclusive" data-name="tacticalPosture" data-options="Mobile|Static"></div>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 1rem;">
+                            <span class="field-label">DDIL effects on cUAS system</span>
+                            <div class="chip-group" data-chips="exclusive" data-name="ddilEffects" data-options="No effects|Intermittent connection|Lost connection|Spoofed"></div>
                         </div>
                         <div class="grid-2" style="margin-bottom: 1rem;">
                             <div class="form-group"><label for="attackingDrones">Number of attacking drones</label><input type="number" id="attackingDrones" name="attackingDrones" min="0" step="1" inputmode="numeric" placeholder="0+"></div>
                             <div class="form-group">
                                 <span class="field-label">Attack geometry</span>
-                                <div class="chip-group" data-chips="exclusive" data-name="attackGeometry" data-options="Low-level|Pop-up|High-angle dive|Loiter/coordinated|other=Other"></div>
+                                <div class="chip-group" data-chips="exclusive" data-name="attackGeometry" data-options="Low-level|Treetop-level|Pop-up|High-angle dive|High-altitude|Loiter/coordinated|other=Other"></div>
                             </div>
                         </div>
                         <div class="form-group other-field-group" id="other-attackGeometry" style="display: none; margin-bottom: 1.25rem;">
@@ -648,7 +645,7 @@
                         </div>
                         <div class="form-group" style="margin-bottom: 1.25rem;">
                             <span class="field-label">Track continuity</span>
-                            <div class="chip-group" data-chips="exclusive" data-name="trackContinuity" data-options="Continuous|Intermittent|No tracks"></div>
+                            <div class="chip-group" data-chips="exclusive" data-name="trackContinuity" data-options="Continuous|Intermittent|No tracks|False positive"></div>
                         </div>
                         <div class="form-subsection-title">Countermeasure &amp; effects</div>
                         <div class="form-group" style="margin-bottom: 1rem;">
@@ -661,7 +658,7 @@
                         </div>
                         <div class="form-group" style="margin-bottom: 1rem;">
                             <span class="field-label">Observed effect</span>
-                            <div class="chip-group" data-chips="exclusive" data-name="observedEffect" data-options="Hover|RTB=RTB (Return to Base)|Controlled descent|Crash"></div>
+                            <div class="chip-group" data-chips="exclusive" data-name="observedEffect" data-options="No effects|Hover|RTB=RTB (Return to Base)|Controlled descent|Crash"></div>
                         </div>
                         <div class="grid-2 pair-sm">
                             <div class="form-group"><label for="defeats">Defeats</label><input type="number" id="defeats" name="defeats" min="0" step="1" inputmode="numeric"></div>
@@ -774,12 +771,16 @@
 
                     <div id="fields-operator-feedback" class="form-fields" hidden>
                         <div class="form-subsection-title">Demographics &amp; mission fit</div>
-                        <div class="grid-2" style="margin-bottom: 1.25rem;">
+                        <div class="grid-2" style="margin-bottom: 1rem;">
                             <div class="form-group"><label for="operatorName">User / operator name</label><input type="text" id="operatorName" name="operatorName" required placeholder="e.g. John Smith"></div>
                             <div class="form-group">
                                 <span class="field-label">Carry this system on an actual mission?</span>
                                 <div class="chip-group" data-chips="exclusive" data-name="carryOnMission" data-required="true" data-options="Yes|No|Conditional"></div>
                             </div>
+                        </div>
+                        <div class="form-group other-field-group" id="conditional-carryOnMission" style="display: none; margin-bottom: 1.25rem;">
+                            <label for="carryOnMissionConditions">Conditions</label>
+                            <input type="text" id="carryOnMissionConditions" name="carryOnMissionConditions" placeholder="When / under what conditions would you carry it?">
                         </div>
                         <div class="form-subsection-title">Operational ratings (1–5)</div>
                         <p class="hint" style="margin-bottom: 0.75rem;">1 = Strongly disagree, 5 = Strongly agree</p>
@@ -825,7 +826,7 @@
                             </div>
                         </div>
                         <div class="form-subsection-title">Performance &amp; support</div>
-                        <div class="grid-2" style="margin-bottom: 1.25rem;">
+                        <div class="grid-2" style="margin-bottom: 1rem;">
                             <div class="form-group">
                                 <span class="field-label">Did the system perform as expected?</span>
                                 <div class="chip-group" data-chips="exclusive" data-name="perfAsExpected" data-required="true" data-options="Yes|No"></div>
@@ -834,6 +835,10 @@
                                 <span class="field-label">Could the team use it without vendor support?</span>
                                 <div class="chip-group" data-chips="exclusive" data-name="useWithoutVendor" data-required="true" data-options="Yes|No|Conditional"></div>
                             </div>
+                        </div>
+                        <div class="form-group other-field-group" id="conditional-useWithoutVendor" style="display: none; margin-bottom: 1.25rem;">
+                            <label for="useWithoutVendorConditions">Conditions</label>
+                            <input type="text" id="useWithoutVendorConditions" name="useWithoutVendorConditions" placeholder="When / under what conditions could the team use it without vendor support?">
                         </div>
                         <div class="form-subsection-title">Qualitative assessment</div>
                         <p class="hint" style="margin-bottom: 0.75rem;">Visible window is about a short paragraph; max 1500 characters each.</p>
@@ -860,6 +865,190 @@
                         <div class="form-group">
                             <label for="feedbackChange">What would you change before operational use?</label>
                             <textarea id="feedbackChange" name="feedbackChange" maxlength="1500" required oninput="updateCharCounter(this)"></textarea>
+                            <div class="text-counter"><span class="current-count">0</span>/1500</div>
+                        </div>
+                    </div>
+
+                    <div id="fields-mission" class="form-fields" hidden>
+                        <div class="form-subsection-title">Mission profile</div>
+                        <div class="grid-2" style="margin-bottom: 1rem;">
+                            <div class="form-group">
+                                <label for="missionName">Mission name</label>
+                                <input type="text" id="missionName" name="missionName" placeholder="e.g. Night patrol / Eval sortie 4">
+                            </div>
+                            <div class="form-group">
+                                <span class="field-label">Mission type</span>
+                                <div class="chip-group" data-chips="exclusive" data-name="missionType" data-options="Training|Test / evaluation|Operational|Demonstration"></div>
+                            </div>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 1.25rem;">
+                            <label for="missionObjective">Objective</label>
+                            <input type="text" id="missionObjective" name="missionObjective" placeholder="What this mission was meant to accomplish">
+                        </div>
+                        <div class="form-subsection-title">Timeline &amp; power</div>
+                        <div class="grid-2 pair-sm" style="margin-bottom: 1rem;">
+                            <div class="form-group">
+                                <label for="missionStartTime">Start time</label>
+                                <div class="time-row">
+                                    <input type="time" id="missionStartTime" name="missionStartTime" class="event-time" step="1">
+                                    <button type="button" class="btn btn-ghost" onclick="stampNow('missionStartTime')">Now</button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="missionEndTime">End time</label>
+                                <div class="time-row">
+                                    <input type="time" id="missionEndTime" name="missionEndTime" class="event-time" step="1">
+                                    <button type="button" class="btn btn-ghost" onclick="stampNow('missionEndTime')">Now</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="grid-2 pair-sm" style="margin-bottom: 1.25rem;">
+                            <div class="form-group">
+                                <label for="batteryStart">Battery at start</label>
+                                <select id="batteryStart" name="batteryStart">
+                                    <option value="">-- Select --</option>
+                                    <option value="0">0%</option>
+                                    <option value="20">20%</option>
+                                    <option value="40">40%</option>
+                                    <option value="60">60%</option>
+                                    <option value="80">80%</option>
+                                    <option value="100">100%</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="batteryEnd">Battery at end</label>
+                                <select id="batteryEnd" name="batteryEnd">
+                                    <option value="">-- Select --</option>
+                                    <option value="0">0%</option>
+                                    <option value="20">20%</option>
+                                    <option value="40">40%</option>
+                                    <option value="60">60%</option>
+                                    <option value="80">80%</option>
+                                    <option value="100">100%</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-subsection-title">Signature to adversary</div>
+                        <div class="form-group" style="margin-bottom: 1rem;">
+                            <label for="visibilityToAdversary">Visibility to adversary</label>
+                            <select id="visibilityToAdversary" name="visibilityToAdversary">
+                                <option value="">-- Select --</option>
+                                <option>Level 0 Blackout / undetectable</option>
+                                <option>Level 1 Low / shielded emission</option>
+                                <option>Level 2 Moderate / ambient glow</option>
+                                <option>Level 3 High / compromising</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 1.25rem;">
+                            <label for="audibilityToAdversary">Audibility to adversary</label>
+                            <select id="audibilityToAdversary" name="audibilityToAdversary">
+                                <option value="">-- Select --</option>
+                                <option>Level 0 Silent / inaudible</option>
+                                <option>Level 1 Low / whisper range</option>
+                                <option>Level 2 Moderate / conversational range</option>
+                                <option>Level 3 High / compromising acoustic signature</option>
+                            </select>
+                        </div>
+                        <div class="form-subsection-title">Outcome</div>
+                        <div class="form-group" style="margin-bottom: 1rem;">
+                            <span class="field-label">Mission result</span>
+                            <div class="chip-group" data-chips="exclusive" data-name="missionResult" data-options="Complete|Partial|Aborted|Not started"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="missionResultNotes">Result notes</label>
+                            <textarea id="missionResultNotes" name="missionResultNotes" maxlength="1500" oninput="updateCharCounter(this)" placeholder="Abort reason, constraints, or what remained unfinished..."></textarea>
+                            <div class="text-counter"><span class="current-count">0</span>/1500</div>
+                        </div>
+                    </div>
+
+                    <div id="fields-net-nef-feedback" class="form-fields" hidden>
+                        <div class="form-subsection-title">Training / fielding context</div>
+                        <div class="grid-2" style="margin-bottom: 1rem;">
+                            <div class="form-group">
+                                <span class="field-label">Feedback type</span>
+                                <div class="chip-group" data-chips="exclusive" data-name="netNefType" data-options="NET|NEF|Combined"></div>
+                            </div>
+                            <div class="form-group">
+                                <span class="field-label">Configuration</span>
+                                <div class="chip-group" data-chips="exclusive" data-name="netConfiguration" data-required="true" data-options="Fixed Site|Mobile|Dismounted/handheld"></div>
+                            </div>
+                        </div>
+                        <div class="grid-2" style="margin-bottom: 1.25rem;">
+                            <div class="form-group">
+                                <span class="field-label">Audience</span>
+                                <div class="chip-group" data-chips="exclusive" data-name="netAudience" data-options="Operators|Maintainers|Leadership|Mixed"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="netDurationHours">Duration (hours)</label>
+                                <input type="number" id="netDurationHours" name="netDurationHours" min="0" step="0.5" inputmode="decimal" placeholder="e.g. 4">
+                            </div>
+                        </div>
+                        <div class="form-subsection-title">Ratings</div>
+                        <p class="hint" style="margin-bottom: 0.75rem;">1 Ineffective / deficient · 2 Below standard / partial · 3 Adequate / functional · 4 Good / comprehensive · 5 Exceptional / mastery</p>
+                        <div class="form-group" style="margin-bottom: 1rem;">
+                            <label for="setupRating">Setup rating</label>
+                            <select id="setupRating" name="setupRating" required>
+                                <option value="">-- Select --</option>
+                                <option value="1">1 Ineffective / deficient</option>
+                                <option value="2">2 Below standard / partial</option>
+                                <option value="3">3 Adequate / functional</option>
+                                <option value="4">4 Good / comprehensive</option>
+                                <option value="5">5 Exceptional / mastery</option>
+                            </select>
+                        </div>
+                        <div class="grid-2" style="margin-bottom: 1.25rem;">
+                            <div class="form-group">
+                                <label for="instructionRating">Instruction / training quality</label>
+                                <select id="instructionRating" name="instructionRating">
+                                    <option value="">-- Select --</option>
+                                    <option value="1">1 Ineffective / deficient</option>
+                                    <option value="2">2 Below standard / partial</option>
+                                    <option value="3">3 Adequate / functional</option>
+                                    <option value="4">4 Good / comprehensive</option>
+                                    <option value="5">5 Exceptional / mastery</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="documentationRating">Documentation adequacy</label>
+                                <select id="documentationRating" name="documentationRating">
+                                    <option value="">-- Select --</option>
+                                    <option value="1">1 Ineffective / deficient</option>
+                                    <option value="2">2 Below standard / partial</option>
+                                    <option value="3">3 Adequate / functional</option>
+                                    <option value="4">4 Good / comprehensive</option>
+                                    <option value="5">5 Exceptional / mastery</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-subsection-title">Readiness</div>
+                        <div class="grid-2" style="margin-bottom: 1rem;">
+                            <div class="form-group">
+                                <span class="field-label">Ready for independent ops / fielding?</span>
+                                <div class="chip-group" data-chips="exclusive" data-name="netReadyIndependent" data-options="Yes|No|Conditional"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="timeToProficiencyHours">Time to proficiency (hours)</label>
+                                <input type="number" id="timeToProficiencyHours" name="timeToProficiencyHours" min="0" step="0.5" inputmode="decimal">
+                            </div>
+                        </div>
+                        <div class="form-group other-field-group" id="conditional-netReadyIndependent" style="display: none; margin-bottom: 1.25rem;">
+                            <label for="netReadyIndependentConditions">Conditions</label>
+                            <input type="text" id="netReadyIndependentConditions" name="netReadyIndependentConditions" placeholder="What still has to be true before independent use?">
+                        </div>
+                        <div class="form-subsection-title">Comments</div>
+                        <div class="form-group" style="margin-bottom: 1rem;">
+                            <label for="netStrengths">What was effective</label>
+                            <textarea id="netStrengths" name="netStrengths" maxlength="1500" oninput="updateCharCounter(this)"></textarea>
+                            <div class="text-counter"><span class="current-count">0</span>/1500</div>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 1rem;">
+                            <label for="netGaps">Gaps or deficiencies</label>
+                            <textarea id="netGaps" name="netGaps" maxlength="1500" oninput="updateCharCounter(this)"></textarea>
+                            <div class="text-counter"><span class="current-count">0</span>/1500</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="netRecommendations">Recommendations before fielding</label>
+                            <textarea id="netRecommendations" name="netRecommendations" maxlength="1500" oninput="updateCharCounter(this)"></textarea>
                             <div class="text-counter"><span class="current-count">0</span>/1500</div>
                         </div>
                     </div>
@@ -908,7 +1097,7 @@
     <div id="notification" class="notification">Saved</div>
 
     <script>
-        const SCHEMA_VERSION = 2;
+        const SCHEMA_VERSION = 3;
         const STORAGE_KEY = 'formDataBase';
         const SESSION_KEY = 'formSession';
         const DRAFT_KEY = 'formDrafts';
@@ -916,10 +1105,12 @@
         const SYSTEMS = ['EnforceAir 2', 'HAWK', 'Wraith Shield', 'DroneSting Scout', 'RfRecon/DroneGun Mk4A'];
         const FORM_TYPES = [
             { id: 'system-properties', type: 'System Properties', badge: 'badge-sys', subtitle: 'Hardware, power, and runtime.' },
+            { id: 'mission', type: 'Mission', badge: 'badge-mis', subtitle: 'Mission profile, power, and signature to adversary.' },
             { id: 'engagement', type: 'Engagement', badge: 'badge-eng', subtitle: 'Threat, detection, and countermeasure outcomes.' },
             { id: 'gcs', type: 'GCS', badge: 'badge-gcs', subtitle: 'Ground control, links, and denial location.' },
             { id: 'failures', type: 'Failure and Resolution Log', badge: 'badge-fail', subtitle: 'Faults, fixes, and mission impact.' },
             { id: 'operator-feedback', type: 'Operator Feedback', badge: 'badge-op', subtitle: 'Ratings and operator comments.' },
+            { id: 'net-nef-feedback', type: 'NET/NEF Feedback', badge: 'badge-net', subtitle: 'New equipment training and fielding feedback.' },
             { id: 'quick-note', type: 'Quick Note', badge: 'badge-note', subtitle: 'Timestamped note. System is optional.' }
         ];
         const META_KEYS = new Set(['collector', 'date', 'time', 'eventId', 'system', 'systemOther', 'locLat', 'locLon', 'locMgrs', 'locAccuracy']);
@@ -1019,6 +1210,20 @@
             if (r.location && !r.location.mgrs && r.data.denialLocationMgrs) {
                 r.location.mgrs = r.data.denialLocationMgrs;
             }
+            if (r.data && r.data.ddilEnv && !r.data.ddilEffects) {
+                const mapped = { 'No': 'No effects', 'No (optimal)': 'No effects' };
+                r.data.ddilEffects = mapped[r.data.ddilEnv] || r.data.ddilEnv;
+            }
+            if (r.data && r.data.batteryChemistry) {
+                const chem = {
+                    'Lithium-Ion (Li-Ion)': 'Lithium-Ion (Li-Ion / Li-Po)',
+                    'Lithium Polymer (Li-Po)': 'Lithium-Ion (Li-Ion / Li-Po)',
+                    'Nickel-Cadmium (NiCd)': 'Other',
+                    'Lead-Acid': 'Other',
+                    'Other / Custom': 'Other'
+                };
+                if (chem[r.data.batteryChemistry]) r.data.batteryChemistry = chem[r.data.batteryChemistry];
+            }
             return r;
         }
 
@@ -1115,22 +1320,28 @@
             });
         }
 
+        function toggleRevealGroup(box, show) {
+            box.style.display = show ? 'block' : 'none';
+            const input = box.querySelector('input, textarea, select');
+            if (!input) return;
+            input.required = show;
+            if (!show) input.value = '';
+        }
+
         function onChipGroupChange(el) {
             const name = el.dataset.name;
             if (name === 'logType') handleLogTypeChange();
             if (name === 'system') syncSystemOther();
+            const selected = [...el.querySelectorAll('input:checked')].map((i) => i.value);
             const otherBox = document.getElementById('other-' + name);
-            if (otherBox) {
-                const selected = [...el.querySelectorAll('input:checked')].map((i) => i.value);
-                const show = selected.includes('other') || selected.includes('Other');
-                otherBox.style.display = show ? 'block' : 'none';
-                const input = otherBox.querySelector('input');
-                if (input) {
-                    input.required = show;
-                    if (!show) input.value = '';
-                }
-            }
+            if (otherBox) toggleRevealGroup(otherBox, selected.includes('other') || selected.includes('Other'));
+            const condBox = document.getElementById('conditional-' + name);
+            if (condBox) toggleRevealGroup(condBox, selected.includes('Conditional'));
             scheduleDraftSave();
+        }
+
+        function syncChipRevealFields(root) {
+            (root || document).querySelectorAll('[data-chips]').forEach(onChipGroupChange);
         }
 
         function selectedChipValue(form, name) {
@@ -1287,7 +1498,9 @@
             }
             clearLocation();
             if (typeId === 'failures') setChipValues(form, 'logType', 'failure');
+            if (typeId === 'mission') stampNow('missionStartTime');
             resetCharCounters(form);
+            syncChipRevealFields(form);
             syncActiveFormFields(typeId);
         }
 
@@ -1511,6 +1724,12 @@
             }
             updateLocUI();
             form.querySelectorAll('textarea[maxlength]').forEach(updateCharCounter);
+            syncChipRevealFields(form);
+            form.querySelectorAll('.other-field-group').forEach((box) => {
+                if (box.style.display === 'none') return;
+                const input = box.querySelector('input, textarea, select');
+                if (input && data[input.name] != null) input.value = data[input.name];
+            });
             syncActiveFormFields(typeId);
             if (typeId === 'failures') handleLogTypeChange();
         }
@@ -1563,7 +1782,8 @@
             const list = document.getElementById('record-list');
             const types = ['all', ...FORM_TYPES.map((t) => t.type)];
             document.getElementById('data-filters').innerHTML = types.map((t) => {
-                const label = t === 'all' ? 'All' : t.replace('Failure and Resolution Log', 'Failures');
+                const label = t === 'all' ? 'All'
+                    : t.replace('Failure and Resolution Log', 'Failures').replace('NET/NEF Feedback', 'NET/NEF');
                 const on = dataFilter === t ? 'btn-primary' : 'btn-ghost';
                 return `<button type="button" class="btn ${on}" onclick="setDataFilter('${t.replace(/'/g, "\\'")}')">${label}</button>`;
             }).join('');

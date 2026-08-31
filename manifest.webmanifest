@@ -1,7 +1,7 @@
 {
   "name": "Data Hub",
   "short_name": "Data Hub",
-  "description": "Field data collection for system, engagement, GCS, failure, and operator records.",
+  "description": "Field data collection for system, mission, engagement, GCS, failure, operator, and NET/NEF records.",
   "id": "/",
   "start_url": "./",
   "scope": "./",
