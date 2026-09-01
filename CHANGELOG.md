@@ -1,3 +1,11 @@
+# Data Hub v2.2
+
+## Changed
+
+- Engagement **Wind** chips now show Beaufort-style knots: Calm: &lt;1 kt, Light: 1-10 kt, Moderate: 11-21 kt, Strong: 22-33 kt. Stored values stay Calm / Light / Moderate / Strong so existing records still open and export correctly.
+- GCS **Drone category** chips are now COTS (DJI, Skydio, etc.), Standard RF FPV, Fiber Optic, Custom, and Autonomous. Prior DJI and FPV values map to the COTS and Standard RF FPV options; Other maps to Custom.
+- GCS **C2 frequency** gains a **Range** chip. Selecting it reveals a required text field for a custom frequency range (`c2FrequencyRange`).
+
 # Data Hub v2.1
 
 ## Added
