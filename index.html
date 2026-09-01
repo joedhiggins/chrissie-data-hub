@@ -870,43 +870,28 @@
                     </div>
 
                     <div id="fields-mission" class="form-fields" hidden>
-                        <div class="form-subsection-title">Mission profile</div>
-                        <div class="grid-2" style="margin-bottom: 1rem;">
-                            <div class="form-group">
-                                <label for="missionName">Mission name</label>
-                                <input type="text" id="missionName" name="missionName" placeholder="e.g. Night patrol / Eval sortie 4">
-                            </div>
-                            <div class="form-group">
-                                <span class="field-label">Mission type</span>
-                                <div class="chip-group" data-chips="exclusive" data-name="missionType" data-options="Training|Test / evaluation|Operational|Demonstration"></div>
-                            </div>
-                        </div>
-                        <div class="form-group" style="margin-bottom: 1.25rem;">
-                            <label for="missionObjective">Objective</label>
-                            <input type="text" id="missionObjective" name="missionObjective" placeholder="What this mission was meant to accomplish">
-                        </div>
-                        <div class="form-subsection-title">Timeline &amp; power</div>
+                        <div class="form-subsection-title">Mission Timeline &amp; Power</div>
                         <div class="grid-2 pair-sm" style="margin-bottom: 1rem;">
                             <div class="form-group">
-                                <label for="missionStartTime">Start time</label>
+                                <label for="missionStartTime">Mission start time</label>
                                 <div class="time-row">
                                     <input type="time" id="missionStartTime" name="missionStartTime" class="event-time" step="1">
                                     <button type="button" class="btn btn-ghost" onclick="stampNow('missionStartTime')">Now</button>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="missionEndTime">End time</label>
+                                <label for="missionEndTime">Mission end time</label>
                                 <div class="time-row">
                                     <input type="time" id="missionEndTime" name="missionEndTime" class="event-time" step="1">
                                     <button type="button" class="btn btn-ghost" onclick="stampNow('missionEndTime')">Now</button>
                                 </div>
                             </div>
                         </div>
-                        <div class="grid-2 pair-sm" style="margin-bottom: 1.25rem;">
+                        <div class="grid-2 pair-sm" style="margin-bottom: 1rem;">
                             <div class="form-group">
-                                <label for="batteryStart">Battery at start</label>
+                                <label for="batteryStart">Battery level at mission start</label>
                                 <select id="batteryStart" name="batteryStart">
-                                    <option value="">-- Select --</option>
+                                    <option value="">-- Select Level --</option>
                                     <option value="0">0%</option>
                                     <option value="20">20%</option>
                                     <option value="40">40%</option>
@@ -916,9 +901,9 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="batteryEnd">Battery at end</label>
+                                <label for="batteryEnd">Battery level at mission end</label>
                                 <select id="batteryEnd" name="batteryEnd">
-                                    <option value="">-- Select --</option>
+                                    <option value="">-- Select Level --</option>
                                     <option value="0">0%</option>
                                     <option value="20">20%</option>
                                     <option value="40">40%</option>
@@ -928,90 +913,86 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="form-subsection-title">Signature to adversary</div>
+                        <div class="grid-2 pair-sm" style="margin-bottom: 1rem;">
+                            <div class="form-group">
+                                <label for="tacticalMovementStartTime">Tactical movement start time</label>
+                                <div class="time-row">
+                                    <input type="time" id="tacticalMovementStartTime" name="tacticalMovementStartTime" class="event-time" step="1">
+                                    <button type="button" class="btn btn-ghost" onclick="stampNow('tacticalMovementStartTime')">Now</button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="tacticalMovementEndTime">Tactical movement end time</label>
+                                <div class="time-row">
+                                    <input type="time" id="tacticalMovementEndTime" name="tacticalMovementEndTime" class="event-time" step="1">
+                                    <button type="button" class="btn btn-ghost" onclick="stampNow('tacticalMovementEndTime')">Now</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 1.25rem;">
+                            <label for="batterySwaps">Number of battery swaps</label>
+                            <input type="number" id="batterySwaps" name="batterySwaps" min="0" step="1" inputmode="numeric" placeholder="e.g. 2">
+                        </div>
+                        <div class="form-subsection-title">Tactical Signature</div>
                         <div class="form-group" style="margin-bottom: 1rem;">
-                            <label for="visibilityToAdversary">Visibility to adversary</label>
+                            <label for="visibilityToAdversary">Visibility to an adversary of lights and screen glow</label>
                             <select id="visibilityToAdversary" name="visibilityToAdversary">
-                                <option value="">-- Select --</option>
+                                <option value="">-- Select Level --</option>
                                 <option>Level 0 Blackout / undetectable</option>
                                 <option>Level 1 Low / shielded emission</option>
                                 <option>Level 2 Moderate / ambient glow</option>
                                 <option>Level 3 High / compromising</option>
                             </select>
                         </div>
-                        <div class="form-group" style="margin-bottom: 1.25rem;">
-                            <label for="audibilityToAdversary">Audibility to adversary</label>
+                        <div class="form-group" style="margin-bottom: 1rem;">
+                            <label for="audibilityToAdversary">Audibility to an adversary of system-generated alerts</label>
                             <select id="audibilityToAdversary" name="audibilityToAdversary">
-                                <option value="">-- Select --</option>
+                                <option value="">-- Select Level --</option>
                                 <option>Level 0 Silent / inaudible</option>
                                 <option>Level 1 Low / whisper range</option>
                                 <option>Level 2 Moderate / conversational range</option>
                                 <option>Level 3 High / compromising acoustic signature</option>
                             </select>
                         </div>
-                        <div class="form-subsection-title">Outcome</div>
-                        <div class="form-group" style="margin-bottom: 1rem;">
-                            <span class="field-label">Mission result</span>
-                            <div class="chip-group" data-chips="exclusive" data-name="missionResult" data-options="Complete|Partial|Aborted|Not started"></div>
-                        </div>
                         <div class="form-group">
-                            <label for="missionResultNotes">Result notes</label>
-                            <textarea id="missionResultNotes" name="missionResultNotes" maxlength="1500" oninput="updateCharCounter(this)" placeholder="Abort reason, constraints, or what remained unfinished..."></textarea>
-                            <div class="text-counter"><span class="current-count">0</span>/1500</div>
+                            <label for="tracksInTakScca">Did the system generate tracks in TAK or SCCA?</label>
+                            <select id="tracksInTakScca" name="tracksInTakScca">
+                                <option value="">-- Select Response --</option>
+                                <option>Yes — TAK</option>
+                                <option>Yes — SCCA</option>
+                                <option>Yes — TAK and SCCA</option>
+                                <option>No</option>
+                                <option>Not used</option>
+                            </select>
                         </div>
                     </div>
 
                     <div id="fields-net-nef-feedback" class="form-fields" hidden>
-                        <div class="form-subsection-title">Training / fielding context</div>
+                        <div class="form-subsection-title">System Identification &amp; Configuration Details</div>
                         <div class="grid-2" style="margin-bottom: 1rem;">
                             <div class="form-group">
-                                <span class="field-label">Feedback type</span>
-                                <div class="chip-group" data-chips="exclusive" data-name="netNefType" data-options="NET|NEF|Combined"></div>
+                                <label for="netOperator">Operator</label>
+                                <input type="text" id="netOperator" name="netOperator" placeholder="Enter operator name">
                             </div>
                             <div class="form-group">
-                                <span class="field-label">Configuration</span>
-                                <div class="chip-group" data-chips="exclusive" data-name="netConfiguration" data-required="true" data-options="Fixed Site|Mobile|Dismounted/handheld"></div>
-                            </div>
-                        </div>
-                        <div class="grid-2" style="margin-bottom: 1.25rem;">
-                            <div class="form-group">
-                                <span class="field-label">Audience</span>
-                                <div class="chip-group" data-chips="exclusive" data-name="netAudience" data-options="Operators|Maintainers|Leadership|Mixed"></div>
-                            </div>
-                            <div class="form-group">
-                                <label for="netDurationHours">Duration (hours)</label>
-                                <input type="number" id="netDurationHours" name="netDurationHours" min="0" step="0.5" inputmode="decimal" placeholder="e.g. 4">
-                            </div>
-                        </div>
-                        <div class="form-subsection-title">Ratings</div>
-                        <p class="hint" style="margin-bottom: 0.75rem;">1 Ineffective / deficient · 2 Below standard / partial · 3 Adequate / functional · 4 Good / comprehensive · 5 Exceptional / mastery</p>
-                        <div class="form-group" style="margin-bottom: 1rem;">
-                            <label for="setupRating">Setup rating</label>
-                            <select id="setupRating" name="setupRating" required>
-                                <option value="">-- Select --</option>
-                                <option value="1">1 Ineffective / deficient</option>
-                                <option value="2">2 Below standard / partial</option>
-                                <option value="3">3 Adequate / functional</option>
-                                <option value="4">4 Good / comprehensive</option>
-                                <option value="5">5 Exceptional / mastery</option>
-                            </select>
-                        </div>
-                        <div class="grid-2" style="margin-bottom: 1.25rem;">
-                            <div class="form-group">
-                                <label for="instructionRating">Instruction / training quality</label>
-                                <select id="instructionRating" name="instructionRating">
-                                    <option value="">-- Select --</option>
-                                    <option value="1">1 Ineffective / deficient</option>
-                                    <option value="2">2 Below standard / partial</option>
-                                    <option value="3">3 Adequate / functional</option>
-                                    <option value="4">4 Good / comprehensive</option>
-                                    <option value="5">5 Exceptional / mastery</option>
+                                <label for="netConfiguration">System Configuration</label>
+                                <select id="netConfiguration" name="netConfiguration" required>
+                                    <option value="">-- Select Configuration --</option>
+                                    <option>Fixed Site</option>
+                                    <option>Mobile</option>
+                                    <option>Dismounted/handheld</option>
                                 </select>
                             </div>
+                        </div>
+                        <div class="grid-2" style="margin-bottom: 1.25rem;">
                             <div class="form-group">
-                                <label for="documentationRating">Documentation adequacy</label>
-                                <select id="documentationRating" name="documentationRating">
-                                    <option value="">-- Select --</option>
+                                <label for="netC2Framework">C2 Framework</label>
+                                <input type="text" id="netC2Framework" name="netC2Framework" placeholder="Enter C2 framework">
+                            </div>
+                            <div class="form-group">
+                                <label for="setupRating">Setup</label>
+                                <select id="setupRating" name="setupRating" required>
+                                    <option value="">-- Select Rating --</option>
                                     <option value="1">1 Ineffective / deficient</option>
                                     <option value="2">2 Below standard / partial</option>
                                     <option value="3">3 Adequate / functional</option>
@@ -1020,35 +1001,54 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="form-subsection-title">Readiness</div>
-                        <div class="grid-2" style="margin-bottom: 1rem;">
-                            <div class="form-group">
-                                <span class="field-label">Ready for independent ops / fielding?</span>
-                                <div class="chip-group" data-chips="exclusive" data-name="netReadyIndependent" data-options="Yes|No|Conditional"></div>
-                            </div>
-                            <div class="form-group">
-                                <label for="timeToProficiencyHours">Time to proficiency (hours)</label>
-                                <input type="number" id="timeToProficiencyHours" name="timeToProficiencyHours" min="0" step="0.5" inputmode="decimal">
-                            </div>
-                        </div>
-                        <div class="form-group other-field-group" id="conditional-netReadyIndependent" style="display: none; margin-bottom: 1.25rem;">
-                            <label for="netReadyIndependentConditions">Conditions</label>
-                            <input type="text" id="netReadyIndependentConditions" name="netReadyIndependentConditions" placeholder="What still has to be true before independent use?">
-                        </div>
-                        <div class="form-subsection-title">Comments</div>
+                        <div class="form-subsection-title">New Equipment Training (NET) Evaluation</div>
                         <div class="form-group" style="margin-bottom: 1rem;">
-                            <label for="netStrengths">What was effective</label>
-                            <textarea id="netStrengths" name="netStrengths" maxlength="1500" oninput="updateCharCounter(this)"></textarea>
+                            <label for="netCurriculumRelevancy">Curriculum Relevancy</label>
+                            <span class="hint">Did the training adequately cover threat identification and tactical reporting?</span>
+                            <textarea id="netCurriculumRelevancy" name="netCurriculumRelevancy" maxlength="1500" oninput="updateCharCounter(this)" placeholder="Your feedback..."></textarea>
                             <div class="text-counter"><span class="current-count">0</span>/1500</div>
                         </div>
                         <div class="form-group" style="margin-bottom: 1rem;">
-                            <label for="netGaps">Gaps or deficiencies</label>
-                            <textarea id="netGaps" name="netGaps" maxlength="1500" oninput="updateCharCounter(this)"></textarea>
+                            <label for="netOperationalReadiness">Operational Readiness</label>
+                            <span class="hint">Do you feel confident executing the CUAS equipment to be able to confirm, clear, cordon, communicate, and control a drone?</span>
+                            <textarea id="netOperationalReadiness" name="netOperationalReadiness" maxlength="1500" oninput="updateCharCounter(this)" placeholder="Your feedback..."></textarea>
                             <div class="text-counter"><span class="current-count">0</span>/1500</div>
                         </div>
+                        <div class="form-group" style="margin-bottom: 1rem;">
+                            <label for="netAnalogCompetency">Analog Competency</label>
+                            <span class="hint">If C2 capability is not functioning, do you feel confident in executing manual voice and map backup protocols?</span>
+                            <textarea id="netAnalogCompetency" name="netAnalogCompetency" maxlength="1500" oninput="updateCharCounter(this)" placeholder="Your feedback..."></textarea>
+                            <div class="text-counter"><span class="current-count">0</span>/1500</div>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 1rem;">
+                            <label for="netTroubleshooting">Troubleshooting</label>
+                            <span class="hint">Do you feel confident in knowing how to troubleshoot the system? (Every possible scenario? Every step before needing to restart?)</span>
+                            <textarea id="netTroubleshooting" name="netTroubleshooting" maxlength="1500" oninput="updateCharCounter(this)" placeholder="Your feedback..."></textarea>
+                            <div class="text-counter"><span class="current-count">0</span>/1500</div>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 1.25rem;">
+                            <label for="netTrainingGaps">Training Gaps</label>
+                            <span class="hint">What procedures do you feel were omitted or under-addressed during instructional phase?</span>
+                            <textarea id="netTrainingGaps" name="netTrainingGaps" maxlength="1500" oninput="updateCharCounter(this)" placeholder="Your feedback..."></textarea>
+                            <div class="text-counter"><span class="current-count">0</span>/1500</div>
+                        </div>
+                        <div class="form-subsection-title">Maintenance, Sustainment, &amp; Manuals</div>
+                        <div class="form-group" style="margin-bottom: 1rem;">
+                            <label for="netPmcsReadiness">PMCS Readiness</label>
+                            <span class="hint">Do you possess the understanding of how to run daily maintenance on the system?</span>
+                            <textarea id="netPmcsReadiness" name="netPmcsReadiness" maxlength="1500" oninput="updateCharCounter(this)" placeholder="Your feedback..."></textarea>
+                            <div class="text-counter"><span class="current-count">0</span>/1500</div>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 1.25rem;">
+                            <label for="netManuals">Manuals</label>
+                            <span class="hint">Do you know where to find the manual for the equipment or do you have access to it?</span>
+                            <textarea id="netManuals" name="netManuals" maxlength="1500" oninput="updateCharCounter(this)" placeholder="Your feedback..."></textarea>
+                            <div class="text-counter"><span class="current-count">0</span>/1500</div>
+                        </div>
+                        <div class="form-subsection-title">After Operations</div>
                         <div class="form-group">
-                            <label for="netRecommendations">Recommendations before fielding</label>
-                            <textarea id="netRecommendations" name="netRecommendations" maxlength="1500" oninput="updateCharCounter(this)"></textarea>
+                            <label for="netAfterOpsPerformance">How do you feel the system performed?</label>
+                            <textarea id="netAfterOpsPerformance" name="netAfterOpsPerformance" maxlength="1500" oninput="updateCharCounter(this)" placeholder="Your feedback..."></textarea>
                             <div class="text-counter"><span class="current-count">0</span>/1500</div>
                         </div>
                     </div>
@@ -1105,12 +1105,12 @@
         const SYSTEMS = ['EnforceAir 2', 'HAWK', 'Wraith Shield', 'DroneSting Scout', 'RfRecon/DroneGun Mk4A'];
         const FORM_TYPES = [
             { id: 'system-properties', type: 'System Properties', badge: 'badge-sys', subtitle: 'Hardware, power, and runtime.' },
-            { id: 'mission', type: 'Mission', badge: 'badge-mis', subtitle: 'Mission profile, power, and signature to adversary.' },
+            { id: 'mission', type: 'Mission', badge: 'badge-mis', subtitle: 'Timeline, power, and tactical signature.' },
             { id: 'engagement', type: 'Engagement', badge: 'badge-eng', subtitle: 'Threat, detection, and countermeasure outcomes.' },
             { id: 'gcs', type: 'GCS', badge: 'badge-gcs', subtitle: 'Ground control, links, and denial location.' },
             { id: 'failures', type: 'Failure and Resolution Log', badge: 'badge-fail', subtitle: 'Faults, fixes, and mission impact.' },
             { id: 'operator-feedback', type: 'Operator Feedback', badge: 'badge-op', subtitle: 'Ratings and operator comments.' },
-            { id: 'net-nef-feedback', type: 'NET/NEF Feedback', badge: 'badge-net', subtitle: 'New equipment training and fielding feedback.' },
+            { id: 'net-nef-feedback', type: 'NET/NEF Feedback', badge: 'badge-net', subtitle: 'New Equipment Training (NET) and New Equipment Fielding (NEF) feedback.' },
             { id: 'quick-note', type: 'Quick Note', badge: 'badge-note', subtitle: 'Timestamped note. System is optional.' }
         ];
         const META_KEYS = new Set(['collector', 'date', 'time', 'eventId', 'system', 'systemOther', 'locLat', 'locLon', 'locMgrs', 'locAccuracy']);
@@ -1477,11 +1477,18 @@
             if (typeId === 'quick-note') {
                 document.getElementById('notes-title').textContent = 'Quick note';
                 notesLabel.textContent = 'Note';
+                notes.placeholder = 'Anything else worth capturing...';
                 notes.required = true;
                 document.querySelectorAll('#form-system-chips input').forEach((i) => { i.required = false; });
+            } else if (typeId === 'net-nef-feedback') {
+                document.getElementById('notes-title').textContent = 'Additional Comments';
+                notesLabel.textContent = 'Additional comments';
+                notes.placeholder = 'Any other comments...';
+                notes.required = false;
             } else {
                 document.getElementById('notes-title').textContent = 'Notes';
                 notesLabel.textContent = 'General notes';
+                notes.placeholder = 'Anything else worth capturing...';
                 notes.required = false;
             }
         }

@@ -2,8 +2,8 @@
 
 ## Added
 
-- **Mission** record type — name, type, objective, start/end time, battery at start and end (0–100% in 20% steps), visibility and audibility to adversary, and result. Uses the same session metadata (collector, date, time, event, system, location) as other records.
-- **NET/NEF Feedback** record type — configuration (Fixed Site / Mobile / Dismounted/handheld), setup rating (1–5 with labeled scale), plus instruction/documentation ratings, readiness, and comments.
+- **Mission** record type — mission start/end time, battery at start and end (0–100% in 20% steps), tactical movement start/end, battery swaps, visibility and audibility to adversary, and whether the system generated tracks in TAK or SCCA. Uses the same session metadata (collector, date, time, event, system, location) as other records.
+- **NET/NEF Feedback** record type — operator, system configuration (Fixed Site / Mobile / Dismounted/handheld), C2 framework, setup rating (1–5), NET evaluation prompts, PMCS/manuals, after-operations performance, and additional comments.
 - Operator Feedback **Conditions** free-text fields that appear when **Conditional** is selected on “carry this system on an actual mission?” and “use without vendor support?”
 
 ## Changed

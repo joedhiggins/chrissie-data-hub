@@ -1,4 +1,4 @@
-        const CACHE = 'datahub-v2-2';
+        const CACHE = 'datahub-v2-3';
 const ASSETS = [
   './',
   './index.html',
