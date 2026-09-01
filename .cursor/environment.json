@@ -1,0 +1,16 @@
+{
+  "name": "Chrissie Data Hub",
+  "terminals": [
+    {
+      "name": "web",
+      "command": "python3 -m http.server 8000 --bind 0.0.0.0 --directory /workspace",
+      "description": "Static HTTP server for the Data Hub PWA, reachable at http://localhost:8000/. Serving over http(s) is required for the service worker and PWA install to work (they do not work from file://)."
+    }
+  ],
+  "ports": [
+    {
+      "name": "web",
+      "port": 8000
+    }
+  ]
+}
