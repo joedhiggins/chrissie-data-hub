@@ -1,3 +1,11 @@
+# Data Hub v2.3
+
+## Changed
+
+- Optional exclusive chip groups (Wind, drone category, signal modulation, and any other single-select chip list that is not required to save) can be cleared by tapping the selected chip again. Cleared fields are stored as `null` in the saved JSON. Required chip groups are unchanged.
+- GCS **Signal modulation**, **Spoofing / false coordinates**, and **Premature transition** each gain a **None** chip at the end of the list.
+- Engagement Detection & tracking **Range** is now in meters (`Range (m)`). The stored key remains `firstDetectionRange`.
+
 # Data Hub v2.2
 
 ## Changed

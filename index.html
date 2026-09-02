@@ -452,7 +452,7 @@
 </head>
 <body>
     <aside>
-            <div class="brand"><span>📋</span> Data Hub v2.2</div>
+            <div class="brand"><span>📋</span> Data Hub v2.3</div>
         <nav>
             <button type="button" class="nav-btn" data-nav="session" onclick="showView('session')">⚙️<span>Session</span></button>
             <button type="button" class="nav-btn nav-btn-new" onclick="openRecordPicker()">＋<span>New</span></button>
@@ -641,7 +641,7 @@
                         <div class="form-subsection-title">Detection &amp; tracking</div>
                         <div class="grid-2 pair-sm" style="margin-bottom: 0.85rem;">
                             <div class="form-group"><label for="firstDetectionTime">First detect time</label><input type="time" id="firstDetectionTime" name="firstDetectionTime" class="event-time" step="1"></div>
-                            <div class="form-group"><label for="firstDetectionRange">Range (km)</label><input type="number" id="firstDetectionRange" name="firstDetectionRange" step="0.001" min="0" inputmode="decimal"></div>
+                            <div class="form-group"><label for="firstDetectionRange">Range (m)</label><input type="number" id="firstDetectionRange" name="firstDetectionRange" min="0" inputmode="numeric"></div>
                         </div>
                         <div class="form-group" style="margin-bottom: 1.25rem;">
                             <span class="field-label">Track continuity</span>
@@ -688,7 +688,7 @@
                             <div class="form-group"><label for="powerWatts">Transmit power (W)</label><input type="number" id="powerWatts" name="powerWatts" step="0.1" min="0" inputmode="decimal"></div>
                             <div class="form-group">
                                 <span class="field-label">Signal modulation</span>
-                                <div class="chip-group" data-chips="exclusive" data-name="signalModulation" data-options="FHSS|DSSS|OFDM"></div>
+                                <div class="chip-group" data-chips="exclusive" data-name="signalModulation" data-options="FHSS|DSSS|OFDM|None"></div>
                             </div>
                         </div>
                         <div class="form-subsection-title">Protocol &amp; security</div>
@@ -701,14 +701,14 @@
                         <div class="grid-2 pair-sm" style="margin-bottom: 1rem;">
                             <div class="form-group">
                                 <span class="field-label">Spoofing / false coordinates</span>
-                                <div class="chip-group" data-chips="exclusive" data-name="spoofingEffect" data-options="Fake no-fly zone|Home point change|False altitude"></div>
+                                <div class="chip-group" data-chips="exclusive" data-name="spoofingEffect" data-options="Fake no-fly zone|Home point change|False altitude|None"></div>
                             </div>
                             <div class="form-group"><label for="spoofingTime">Spoof time</label><input type="time" id="spoofingTime" name="spoofingTime" class="event-time" step="1"></div>
                         </div>
                         <div class="grid-2 pair-sm" style="margin-bottom: 1.25rem;">
                             <div class="form-group">
                                 <span class="field-label">Premature transition</span>
-                                <div class="chip-group" data-chips="exclusive" data-name="transitionEffect" data-options="Return to home|Land in place|Continue to fly away"></div>
+                                <div class="chip-group" data-chips="exclusive" data-name="transitionEffect" data-options="Return to home|Land in place|Continue to fly away|None"></div>
                             </div>
                             <div class="form-group"><label for="transitionTime">Time of transition</label><input type="time" id="transitionTime" name="transitionTime" class="event-time" step="1"></div>
                         </div>
@@ -1097,7 +1097,7 @@
     <div id="notification" class="notification">Saved</div>
 
     <script>
-        const SCHEMA_VERSION = 4;
+        const SCHEMA_VERSION = 5;
         const DRONE_CATEGORY_MAP = {
             'DJI': 'COTS (DJI, Skydio, etc.)',
             'FPV': 'Standard RF FPV',
@@ -1323,16 +1323,40 @@
                 }
                 el.dataset.mounted = '1';
                 el.addEventListener('change', () => onChipGroupChange(el));
-                if (!multiple && !required) {
-                    el.addEventListener('mousedown', (e) => {
-                        const input = e.target.closest('.chip') && e.target.closest('.chip').querySelector('input[type="radio"]');
-                        if (input && input.checked) {
-                            e.preventDefault();
-                            input.checked = false;
-                            input.dispatchEvent(new Event('change', { bubbles: true }));
-                        }
-                    });
-                }
+                if (!multiple && !required) enableOptionalRadioDeselect(el);
+            });
+        }
+
+        function chipRadioFromEvent(el, e) {
+            const chip = e.target.closest('.chip');
+            if (!chip || !el.contains(chip)) return null;
+            return chip.querySelector('input[type="radio"]');
+        }
+
+        /** Optional exclusive chips toggle off on a second tap so the field can be saved as null. */
+        function enableOptionalRadioDeselect(el) {
+            el.addEventListener('pointerdown', (e) => {
+                const input = chipRadioFromEvent(el, e);
+                el._deselectRadio = (input && input.checked) ? input : null;
+            });
+            el.addEventListener('click', (e) => {
+                const input = el._deselectRadio;
+                el._deselectRadio = null;
+                if (!input || chipRadioFromEvent(el, e) !== input) return;
+                e.preventDefault();
+                input.checked = false;
+                input.dispatchEvent(new Event('change', { bubbles: true }));
+            });
+        }
+
+        function applyUnsetOptionalChips(data) {
+            const active = document.getElementById('fields-' + currentTypeId);
+            if (!active) return;
+            active.querySelectorAll('[data-chips="exclusive"]').forEach((el) => {
+                if (el.dataset.required === 'true') return;
+                const name = el.dataset.name;
+                if (!name) return;
+                if (!el.querySelector('input[type="radio"]:checked')) data[name] = null;
             });
         }
 
@@ -1571,6 +1595,7 @@
                     data[key] = value;
                 }
             }
+            applyUnsetOptionalChips(data);
             let system = selectedChipValue(form, 'system');
             if (system === 'other') system = form.querySelector('#systemOther').value.trim();
             const collector = session.collector;
