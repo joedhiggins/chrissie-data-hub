@@ -452,7 +452,7 @@
 </head>
 <body>
     <aside>
-            <div class="brand"><span>📋</span> Data Hub v2.1</div>
+            <div class="brand"><span>📋</span> Data Hub v2.2</div>
         <nav>
             <button type="button" class="nav-btn" data-nav="session" onclick="showView('session')">⚙️<span>Session</span></button>
             <button type="button" class="nav-btn nav-btn-new" onclick="openRecordPicker()">＋<span>New</span></button>
@@ -612,7 +612,7 @@
                         <div class="form-subsection-title">Environmental conditions</div>
                         <div class="form-group" style="margin-bottom: 0.85rem;">
                             <span class="field-label">Wind</span>
-                            <div class="chip-group" data-chips="exclusive" data-name="wind" data-options="Calm|Light|Moderate|Strong"></div>
+                            <div class="chip-group" data-chips="exclusive" data-name="wind" data-options="Calm=Calm: &lt;1 kt|Light=Light: 1-10 kt|Moderate=Moderate: 11-21 kt|Strong=Strong: 22-33 kt"></div>
                         </div>
                         <div class="grid-2 pair-sm" style="margin-bottom: 1.25rem;">
                             <div class="form-group"><label for="temperature">Temp (°C)</label><input type="number" id="temperature" name="temperature" step="0.1" inputmode="decimal"></div>
@@ -669,11 +669,7 @@
                     <div id="fields-gcs" class="form-fields" hidden>
                         <div class="form-subsection-title">Drone category</div>
                         <div class="form-group" style="margin-bottom: 1rem;">
-                            <div class="chip-group" data-chips="exclusive" data-name="droneCategory" data-options="DJI|FPV|Custom|Fiber Optic|other=Other"></div>
-                        </div>
-                        <div class="form-group other-field-group" id="other-droneCategory" style="display: none; margin-bottom: 1rem;">
-                            <label for="droneCategoryOther">Specify drone category</label>
-                            <input type="text" id="droneCategoryOther" name="droneCategoryOther">
+                            <div class="chip-group" data-chips="exclusive" data-name="droneCategory" data-options="COTS (DJI, Skydio, etc.)|Standard RF FPV|Fiber Optic|Custom|Autonomous"></div>
                         </div>
                         <div class="form-group" style="margin-bottom: 1.25rem;">
                             <label for="takeoffTime">Takeoff time</label>
@@ -682,7 +678,11 @@
                         <div class="form-subsection-title">Link &amp; transmit settings</div>
                         <div class="form-group" style="margin-bottom: 1rem;">
                             <span class="field-label">C2 frequency</span>
-                            <div class="chip-group" data-chips="multiple" data-name="c2Frequency" data-options="170 MHz|433 MHz|868 MHz|915 MHz|1.2 GHz|1.3 GHz|1.9–2.3 GHz|2.4 GHz|3.3–3.8 GHz|5.2 GHz|5.8 GHz|WiFi"></div>
+                            <div class="chip-group" data-chips="multiple" data-name="c2Frequency" data-options="170 MHz|433 MHz|868 MHz|915 MHz|1.2 GHz|1.3 GHz|1.9–2.3 GHz|2.4 GHz|3.3–3.8 GHz|5.2 GHz|5.8 GHz|WiFi|Range"></div>
+                        </div>
+                        <div class="form-group other-field-group" id="range-c2Frequency" style="display: none; margin-bottom: 1rem;">
+                            <label for="c2FrequencyRange">Frequency range</label>
+                            <input type="text" id="c2FrequencyRange" name="c2FrequencyRange" placeholder="e.g. 2.1–2.5 GHz">
                         </div>
                         <div class="grid-2" style="margin-bottom: 1.25rem;">
                             <div class="form-group"><label for="powerWatts">Transmit power (W)</label><input type="number" id="powerWatts" name="powerWatts" step="0.1" min="0" inputmode="decimal"></div>
@@ -1097,7 +1097,13 @@
     <div id="notification" class="notification">Saved</div>
 
     <script>
-        const SCHEMA_VERSION = 3;
+        const SCHEMA_VERSION = 4;
+        const DRONE_CATEGORY_MAP = {
+            'DJI': 'COTS (DJI, Skydio, etc.)',
+            'FPV': 'Standard RF FPV',
+            'other': 'Custom',
+            'Other': 'Custom'
+        };
         const STORAGE_KEY = 'formDataBase';
         const SESSION_KEY = 'formSession';
         const DRAFT_KEY = 'formDrafts';
@@ -1188,10 +1194,19 @@
             try { session = Object.assign(session, JSON.parse(localStorage.getItem(SESSION_KEY)) || {}); } catch { /* keep defaults */ }
             if (!session.date) session.date = localDateISO();
             try { drafts = JSON.parse(localStorage.getItem(DRAFT_KEY)) || {}; } catch { drafts = {}; }
+            Object.values(drafts).forEach((draft) => { if (draft) migrateFormData(draft.data); });
         }
         function saveDatabase() { localStorage.setItem(STORAGE_KEY, JSON.stringify(database)); }
         function saveSession() { localStorage.setItem(SESSION_KEY, JSON.stringify(session)); }
         function saveDrafts() { localStorage.setItem(DRAFT_KEY, JSON.stringify(drafts)); }
+
+        function migrateFormData(data) {
+            if (!data) return data;
+            if (data.droneCategory && DRONE_CATEGORY_MAP[data.droneCategory]) {
+                data.droneCategory = DRONE_CATEGORY_MAP[data.droneCategory];
+            }
+            return data;
+        }
 
         function migrateRecord(rec) {
             const r = Object.assign({}, rec);
@@ -1224,6 +1239,7 @@
                 };
                 if (chem[r.data.batteryChemistry]) r.data.batteryChemistry = chem[r.data.batteryChemistry];
             }
+            migrateFormData(r.data);
             return r;
         }
 
@@ -1298,7 +1314,7 @@
                 el.innerHTML = options.map((opt) => `
                     <label class="chip">
                         <input type="${multiple ? 'checkbox' : 'radio'}" name="${name}" value="${opt.value.replace(/"/g, '&quot;')}">
-                        <span>${opt.label}</span>
+                        <span>${escapeHtml(opt.label)}</span>
                     </label>
                 `).join('');
                 if (required && !multiple) {
@@ -1337,6 +1353,8 @@
             if (otherBox) toggleRevealGroup(otherBox, selected.includes('other') || selected.includes('Other'));
             const condBox = document.getElementById('conditional-' + name);
             if (condBox) toggleRevealGroup(condBox, selected.includes('Conditional'));
+            const rangeBox = document.getElementById('range-' + name);
+            if (rangeBox) toggleRevealGroup(rangeBox, selected.includes('Range'));
             scheduleDraftSave();
         }
 
@@ -1702,7 +1720,7 @@
 
         function fillForm(source, typeId) {
             const form = document.getElementById('record-form');
-            const data = source.data || {};
+            const data = migrateFormData(Object.assign({}, source.data || {}));
             if (editId) {
                 const ctx = document.getElementById('session-context');
                 ctx.hidden = false;
